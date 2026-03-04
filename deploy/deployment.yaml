@@ -13,12 +13,14 @@ spec:
     metadata:
       labels:
         app: memory-mcp
+      annotations:
+        alpha.image.policy.openshift.io/resolve-names: '*'
     spec:
       containers:
         - name: memory-mcp
           image: memory-mcp:latest
           command: ["/bin/bash", "-c"]
-          args: ["uv run src/memory_mcp/server.py"]
+          args: ["uv run --locked --no-sync src/memory_mcp/server.py"]
           ports:
             - containerPort: 1313
           resources:
@@ -42,6 +44,9 @@ spec:
             limits:
               cpu: 500m
               memory: 512Mi
+          env:
+            - name: PGDATA
+              value: /var/lib/postgresql/data/pgdata
           envFrom:
             - secretRef:
                 name: postgres-credentials
