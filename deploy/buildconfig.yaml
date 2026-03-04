@@ -1,0 +1,20 @@
+apiVersion: build.openshift.io/v1
+kind: BuildConfig
+metadata:
+  name: memory-mcp
+spec:
+  source:
+    type: Git
+    git:
+      uri: https://github.com/taagarwa-rh/memory_mcp.git
+      ref: main
+  strategy:
+    type: Docker
+    dockerStrategy:
+      dockerfilePath: Containerfile
+  output:
+    to:
+      kind: ImageStreamTag
+      name: memory-mcp:latest
+  triggers:
+    - type: ConfigChange

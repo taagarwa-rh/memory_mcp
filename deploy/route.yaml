@@ -1,0 +1,12 @@
+apiVersion: route.openshift.io/v1
+kind: Route
+metadata:
+  name: memory-mcp
+spec:
+  to:
+    kind: Service
+    name: memory-mcp
+  port:
+    targetPort: 1313
+  tls:
+    termination: edge

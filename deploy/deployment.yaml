@@ -1,0 +1,54 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: memory-mcp
+  labels:
+    app: memory-mcp
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: memory-mcp
+  template:
+    metadata:
+      labels:
+        app: memory-mcp
+    spec:
+      containers:
+        - name: memory-mcp
+          image: memory-mcp:latest
+          command: ["/bin/bash", "-c"]
+          args: ["uv run src/memory_mcp/server.py"]
+          ports:
+            - containerPort: 1313
+          resources:
+            requests:
+              cpu: 500m
+              memory: 250Mi
+            limits:
+              cpu: 500m
+              memory: 1Gi
+          envFrom:
+            - secretRef:
+                name: postgres-credentials
+        - name: postgres
+          image: postgres:17
+          ports:
+            - containerPort: 5432
+          resources:
+            requests:
+              cpu: 250m
+              memory: 256Mi
+            limits:
+              cpu: 500m
+              memory: 512Mi
+          envFrom:
+            - secretRef:
+                name: postgres-credentials
+          volumeMounts:
+            - name: postgres-data
+              mountPath: /var/lib/postgresql/data
+      volumes:
+        - name: postgres-data
+          persistentVolumeClaim:
+            claimName: postgres-data
