@@ -45,7 +45,8 @@ async def search_memory(
     This will return a list of memories. Each memory will have an ID, content, and context.
 
     Args:
-        query: Search query. For example: "What are the user's interests?"
+        query (str): 
+            Search query. For example: "What are the user's interests?"
 
     Returns:
         list[dict]: List of memories, including ID, content, and context.
@@ -65,7 +66,7 @@ async def upsert_memory(
     content: str,
     context: str,
     *,
-    memory_id: uuid.UUID | None = None,
+    memory_id: str | None = None,
 ):
     """
     Upsert a memory about the user in the database.
@@ -75,12 +76,15 @@ async def upsert_memory(
     that are the same. If the user corrects a memory, UPDATE it.
 
     Args:
-        content: The main content of the memory. For example:
+        content (str): 
+            The main content of the memory. For example:
             "User expressed interest in learning about French."
-        context: Additional context for the memory. For example:
+        context (str):
+            Additional context for the memory. For example:
             "This was mentioned while discussing career options in Europe."
-        memory_id: ONLY PROVIDE IF UPDATING AN EXISTING MEMORY.
-        The memory to overwrite.
+        memory_id (str, optional): 
+            ONLY PROVIDE IF UPDATING AN EXISTING MEMORY.
+            The memory to overwrite.
 
     Returns:
         str: A success message
